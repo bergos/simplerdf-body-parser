@@ -6,6 +6,7 @@ var express = require('express')
 var rdf = require('rdf-ext')
 var request = require('supertest')
 var simpleBodyParser = require('..')
+var url = require('url')
 var SimpleRDF = require('simplerdf/lite')
 
 function asyncAssert (done, callback) {
@@ -48,6 +49,38 @@ describe('simplerdf-body-parser', function () {
             assert(simple instanceof SimpleRDF)
             assert.equal(simple.iri().toString(), 'http://example.org/parse/simple-iri')
             assert.equal(simple.graph().length, 0)
+          })
+        })
+    })
+
+    it('should use default absoluteUrl implementation of none was provided', function (done) {
+      var simple
+
+      app.use('/parse/simple-absolute-url', function (req, res, next) {
+        delete req.absoluteUrl
+
+        next()
+      })
+      app.use('/parse/simple-absolute-url', simpleBodyParser())
+      app.use('/parse/simple-absolute-url', function (req, res) {
+        simple = req.simple
+
+        res.end()
+      })
+
+      request(app)
+        .get('/parse/simple-absolute-url')
+        .set('Accept', 'application/ld+json')
+        .expect(200)
+        .end(function (err, res) {
+          if (err) {
+            return done(err)
+          }
+
+          asyncAssert(done, function () {
+            assert(simple)
+            assert(simple instanceof SimpleRDF)
+            assert.equal(url.parse(simple.iri().toString()).pathname, '/parse/simple-absolute-url')
           })
         })
     })

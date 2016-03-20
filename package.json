@@ -22,6 +22,8 @@
   },
   "homepage": "https://github.com/bergos/simplerdf-body-parser",
   "dependencies": {
+    "bluebird": "^3.3.4",
+    "ldapp-absolute-url": "^0.1.1",
     "simplerdf": "^0.2.7"
   },
   "devDependencies": {
