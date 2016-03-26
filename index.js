@@ -1,5 +1,6 @@
 var Promise = require('bluebird')
 var absoluteUrl = Promise.promisify(require('ldapp-absolute-url').init())
+var bodyParser = Promise.promisify(require('rdf-body-parser')())
 var SimpleRDF = require('simplerdf/lite')
 
 function attachAbsoluteUrl (req) {
@@ -10,12 +11,22 @@ function attachAbsoluteUrl (req) {
   return absoluteUrl(req, null)
 }
 
+function attachBodyParser (req, res) {
+  if (res.sendGraph) {
+    return Promise.resolve()
+  }
+
+  return bodyParser(req, res)
+}
+
 function sendSimple (simple) {
   this.sendGraph(simple.graph())
 }
 
 function middleware (context, req, res, next) {
   attachAbsoluteUrl(req).then(function () {
+    return attachBodyParser(req, res)
+  }).then(function () {
     // create SimpleRDF object from req.graph
     req.simple = new SimpleRDF(context, req.absoluteUrl(), req.graph)
 

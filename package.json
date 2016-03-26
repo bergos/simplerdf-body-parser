@@ -24,6 +24,7 @@
   "dependencies": {
     "bluebird": "^3.3.4",
     "ldapp-absolute-url": "^0.1.1",
+    "rdf-body-parser": "^0.3.2",
     "simplerdf": "^0.2.7"
   },
   "devDependencies": {

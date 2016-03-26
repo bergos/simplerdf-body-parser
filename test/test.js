@@ -53,7 +53,7 @@ describe('simplerdf-body-parser', function () {
         })
     })
 
-    it('should use default absoluteUrl implementation of none was provided', function (done) {
+    it('should use the default absoluteUrl implementation if none was provided', function (done) {
       var simple
 
       app.use('/parse/simple-absolute-url', function (req, res, next) {
@@ -81,6 +81,35 @@ describe('simplerdf-body-parser', function () {
             assert(simple)
             assert(simple instanceof SimpleRDF)
             assert.equal(url.parse(simple.iri().toString()).pathname, '/parse/simple-absolute-url')
+          })
+        })
+    })
+
+    it('should use the default rdf body parser implementation if none was provided', function (done) {
+      var simple
+
+      app.use('/parse/simple-rdf-body-parser', simpleBodyParser())
+      app.use('/parse/simple-rdf-body-parser', function (req, res) {
+        simple = req.simple
+
+        res.end()
+      })
+
+      request(app)
+        .post('/parse/simple-rdf-body-parser')
+        .set('Accept', 'text/turtle')
+        .set('Content-Type', 'text/turtle')
+        .send('<http://example.org/subject> <http://example.org/predicate> <http://example.org/object> .')
+        .expect(200)
+        .end(function (err, res) {
+          if (err) {
+            return done(err)
+          }
+
+          asyncAssert(done, function () {
+            assert(simple)
+            assert(simple instanceof SimpleRDF)
+            assert.equal(simple.graph().length, 1)
           })
         })
     })
