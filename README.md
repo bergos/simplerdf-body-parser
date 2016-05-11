@@ -1,6 +1,7 @@
-# simplerdf-body-parser
+# simplerdf-body-parser [![](https://img.shields.io/badge/chat-gitter-FC424C.svg?style=flat-square)](https://gitter.im/simplerdf/simplerdf) [![](https://img.shields.io/badge/project-SimpleRDF-FC424C.svg?style=flat-square)](https://github.com/simplerdf)
 
-The `simplerdf-body-parser` middleware converts a graph, attached to the request as `.graph`, to a SimpleRDF object and attaches that object to the request as `.simple`.
+> The `simplerdf-body-parser` middleware converts a graph, attached to the request as `.graph`, to a SimpleRDF object and attaches that object to the request as `.simple`.
+
 `rdf-body-parser` can be used to convert the incoming RDF data to a graph and attach it to `.graph`.
 `simplerdf-body-parser` also attaches the `.sendSimple` function to the response to send a SimpleRDF object in the requested format.
 
