@@ -9,31 +9,39 @@
 
 Import the `simplerdf-body-parser` and all other required modules:
 
-    var rdfBodyParser = require('rdf-body-parser')
-    var rdfFormats = require('rdf-formats-common')()
-    var simpleBodyParser = require('simplerdf-body-parser')
+```js
+var rdfBodyParser = require('rdf-body-parser')
+var rdfFormats = require('rdf-formats-common')()
+var simpleBodyParser = require('simplerdf-body-parser')
+```
 
 First let's add the `rdf-body-parser` middleware:
 
-    app.use(rdfBodyParser(rdfFormats))
+```js
+app.use(rdfBodyParser(rdfFormats))
+```
 
 The `simplerdf-body-parser` module returns a function to create a middleware which requires the context for the SimpleRDF objects.
 So let's call that function:
 
-    app.use(simpleBodyParser({
-      'name': {
-        '@id': 'http://schema.org/name'
-      }
-    }))
+```js
+app.use(simpleBodyParser({
+  'name': {
+    '@id': 'http://schema.org/name'
+  }
+}))
+```
 
 Now you can use the `.simple` property and `.sendSimple` function:
 
-    app.use(function (req, res, next) {
-       // .simple contains the SimpleRDF object
-       if (req.simple) {
-         console.log(req.simple.name)
-       }
+```js
+app.use(function (req, res, next) {
+   // .simple contains the SimpleRDF object
+   if (req.simple) {
+     console.log(req.simple.name)
+   }
 
-       // .sendSimple sends a SimpleRDF object to the client
-       res.sendGraph(simple)
-    })
+   // .sendSimple sends a SimpleRDF object to the client
+   res.sendGraph(simple)
+})
+```
