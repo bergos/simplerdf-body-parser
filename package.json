@@ -4,8 +4,7 @@
   "description": "SimpleRDF body parser middleware",
   "main": "index.js",
   "scripts": {
-    "lint": "standard",
-    "test": "mocha"
+    "test": "standard && mocha"
   },
   "repository": {
     "type": "git",
@@ -22,15 +21,14 @@
   },
   "homepage": "https://github.com/bergos/simplerdf-body-parser",
   "dependencies": {
-    "bluebird": "^3.3.4",
-    "ldapp-absolute-url": "^0.1.1",
-    "rdf-body-parser": "^0.3.2",
-    "simplerdf": "^0.2.7"
+    "absolute-url": "^1.2.2",
+    "rdf-body-parser": "^1.2.0",
+    "simplerdf-core": "^1.2.0"
   },
   "devDependencies": {
-    "bluebird": "^3.3.4",
-    "express": "^4.13.4",
-    "mocha": "^2.4.5",
-    "supertest": "^1.2.0"
+    "express": "^4.16.3",
+    "mocha": "^5.0.4",
+    "rdf-ext": "^1.1.0",
+    "supertest": "^3.0.0"
   }
 }

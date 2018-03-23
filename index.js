@@ -1,44 +1,27 @@
-var Promise = require('bluebird')
-var absoluteUrl = Promise.promisify(require('ldapp-absolute-url').init())
-var bodyParser = Promise.promisify(require('rdf-body-parser')())
-var SimpleRDF = require('simplerdf/lite')
-
-function attachAbsoluteUrl (req) {
-  if (req.absoluteUrl) {
-    return Promise.resolve()
-  }
-
-  return absoluteUrl(req, null)
-}
-
-function attachBodyParser (req, res) {
-  if (res.sendGraph) {
-    return Promise.resolve()
-  }
-
-  return bodyParser(req, res)
-}
+const absoluteUrl = require('absolute-url')
+const bodyParser = require('rdf-body-parser')
+const SimpleCore = require('simplerdf-core')
 
 function sendSimple (simple) {
   this.sendGraph(simple.graph())
 }
 
-function middleware (context, req, res, next) {
-  attachAbsoluteUrl(req).then(function () {
-    return attachBodyParser(req, res)
-  }).then(function () {
-    // create SimpleRDF object from req.graph
-    req.simple = new SimpleRDF(context, req.absoluteUrl(), req.graph)
+function factory (context, options) {
+  options = options || {}
 
-    // attach sendSimple method
-    res.sendSimple = sendSimple
-  }).asCallback(next)
+  const Simple = options.Simple || SimpleCore
+
+  return (req, res, next) => {
+    absoluteUrl.attach(req)
+
+    bodyParser.attach(req, res).then(() => {
+      // create SimpleRDF object from req.graph
+      req.simple = new Simple(context, req.absoluteUrl(), req.graph)
+
+      // attach sendSimple method
+      res.sendSimple = sendSimple
+    }).then(next).catch(next)
+  }
 }
 
-function init (context) {
-  return middleware.bind(null, context)
-}
-
-init.middleware = middleware
-
-module.exports = init
+module.exports = factory

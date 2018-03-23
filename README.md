@@ -2,23 +2,14 @@
 
 > The `simplerdf-body-parser` middleware converts a graph, attached to the request as `.graph`, to a SimpleRDF object and attaches that object to the request as `.simple`.
 
-`rdf-body-parser` can be used to convert the incoming RDF data to a graph and attach it to `.graph`.
 `simplerdf-body-parser` also attaches the `.sendSimple` function to the response to send a SimpleRDF object in the requested format.
 
 ## Usage
 
-Import the `simplerdf-body-parser` and all other required modules:
+Import the `simplerdf-body-parser` module:
 
 ```js
-var rdfBodyParser = require('rdf-body-parser')
-var rdfFormats = require('rdf-formats-common')()
 var simpleBodyParser = require('simplerdf-body-parser')
-```
-
-First let's add the `rdf-body-parser` middleware:
-
-```js
-app.use(rdfBodyParser(rdfFormats))
 ```
 
 The `simplerdf-body-parser` module returns a function to create a middleware which requires the context for the SimpleRDF objects.
