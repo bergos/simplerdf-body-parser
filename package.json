@@ -1,6 +1,6 @@
 {
   "name": "simplerdf-body-parser",
-  "version": "0.3.1",
+  "version": "1.0.0",
   "description": "SimpleRDF body parser middleware",
   "main": "index.js",
   "scripts": {
