@@ -3,7 +3,7 @@ const bodyParser = require('rdf-body-parser')
 const SimpleCore = require('simplerdf-core')
 
 function sendSimple (simple) {
-  this.sendGraph(simple.graph())
+  this.graph(simple.graph())
 }
 
 function factory (context, options) {
@@ -19,7 +19,7 @@ function factory (context, options) {
       req.simple = new Simple(context, req.absoluteUrl(), req.graph)
 
       // attach sendSimple method
-      res.sendSimple = sendSimple
+      res.simple = sendSimple
     }).then(next).catch(next)
   }
 }

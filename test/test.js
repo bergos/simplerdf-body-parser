@@ -203,12 +203,12 @@ describe('simplerdf-body-parser', () => {
   })
 
   describe('send', () => {
-    it('should attach the send method to res.sendSimple', () => {
+    it('should attach the send method to res.simple', () => {
       let sendSimple
 
       app.use('/send/simple-function', simpleBodyParser())
       app.use('/send/simple-function', (req, res) => {
-        sendSimple = res.sendSimple
+        sendSimple = res.simple
 
         res.end()
       })
@@ -222,7 +222,7 @@ describe('simplerdf-body-parser', () => {
         })
     })
 
-    it('should send the graph of a SimpleCore object via res.sendSimple', () => {
+    it('should send the graph of a SimpleCore object via res.simple', () => {
       const simple = new SimpleCore({predicate: {
         '@id': 'http://example.org/predicate',
         '@type': '@id'
@@ -233,7 +233,9 @@ describe('simplerdf-body-parser', () => {
       let graph
 
       app.use('/send/simple-send', (req, res, next) => {
-        res.sendGraph = sentGraph => {
+        req.graph = rdf.dataset()
+
+        res.graph = sentGraph => {
           graph = sentGraph
         }
 
@@ -241,7 +243,7 @@ describe('simplerdf-body-parser', () => {
       })
       app.use('/send/simple-send', simpleBodyParser())
       app.use('/send/simple-send', (req, res) => {
-        res.sendSimple(simple)
+        res.simple(simple)
 
         res.end()
       })
@@ -252,7 +254,7 @@ describe('simplerdf-body-parser', () => {
         .expect(200)
         .then(() => {
           assert(graph)
-          assert(graph.equals(simple.graph()))
+          assert.equal(graph.toCanonical(), simple.graph().toCanonical())
         })
     })
   })
